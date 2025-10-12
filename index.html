@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento - Lavagem e Polimento</title>
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='8' fill='%234CAF50'/%3E%3Cpath d='M16 16h16v4H16zM16 24h16v4H16zM16 32h12v4H16z' fill='white'/%3E%3C/svg%3E">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            background: #f5f5f5;
+            border: none;
+            font-size: 1.1em;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: #e8e8e8;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            font-weight: bold;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.2em;
+            color: #667eea;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .service-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .service-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .service-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+        }
+
+        .service-card h3 {
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .service-card p {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .service-card .price {
+            font-size: 1.3em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .products-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .product-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .product-item:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .product-item.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+        }
+
+        .product-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .product-price {
+            color: #667eea;
+            font-weight: bold;
+            margin-left: auto;
+        }
+
+        .summary {
+            background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 10px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn.whatsapp {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+        }
+
+        .btn.whatsapp:hover {
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn.email {
+            background: linear-gradient(135deg, #EA4335 0%, #C5221F 100%);
+        }
+
+        .btn.email:hover {
+            box-shadow: 0 5px 15px rgba(234, 67, 53, 0.4);
+        }
+
+        .btn.danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        }
+
+        .btn-small {
+            padding: 10px 20px;
+            font-size: 0.9em;
+            width: auto;
+            margin: 0;
+        }
+
+        .client-info {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .input-group input,
+        .input-group textarea {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-group select:disabled {
+            background: #f0f0f0;
+            cursor: not-allowed;
+        }
+
+        .date-warning {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            color: #856404;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        .date-warning.show {
+            display: block;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .history-item {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .history-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.2);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .history-client {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .history-date {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .history-total {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .history-details {
+            margin: 10px 0;
+            color: #666;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .search-container {
+            position: relative;
+            margin: 20px 0;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .clear-btn {
+            position: absolute;
+            right: 15px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.2s ease;
+        }
+
+        .clear-btn:hover {
+            background: #ee5a6f;
+            transform: scale(1.1);
+        }
+
+        .clear-btn.show {
+            display: flex;
+        }
+
+        .show-more-btn {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .show-more-btn:hover {
+            background: #764ba2;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                flex-direction: row;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚗 Lavagem & Polimento</h1>
+            <p>Agende seu serviço</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('booking')">📋 Agendar</button>
+            <button class="tab" onclick="switchTab('history')">📊 Meus Agendamentos</button>
+        </div>
+
+        <!-- ABA: AGENDAMENTO -->
+        <div id="bookingTab" class="tab-content active">
+            <div class="section">
+                <h2 class="section-title">📋 Seus Dados</h2>
+                <div class="client-info">
+                    <div class="input-group">
+                        <label for="clientName">Seu Nome:</label>
+                        <input type="text" id="clientName" placeholder="Digite seu nome completo">
+                    </div>
+                    <div class="input-group">
+                        <label for="clientPhone">Seu Telefone:</label>
+                        <input type="tel" id="clientPhone" placeholder="(00) 00000-0000">
+                    </div>
+                    <div class="input-group">
+                        <label for="clientEmail">Seu E-mail:</label>
+                        <input type="email" id="clientEmail" placeholder="seu@email.com">
+                    </div>
+                    <div class="input-group">
+                        <label for="selectedDate">Data do Agendamento:</label>
+                        <input type="date" id="selectedDate" min="" onchange="updateAvailableHours()">
+                        <div class="date-warning" id="dateWarning">⚠️ Esta data não está disponível para agendamentos.
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="selectedTime">Horário:</label>
+                        <select id="selectedTime"
+                            style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em;"
+                            disabled>
+                            <option value="">Selecione primeiro uma data</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">🧼 Selecione os Serviços</h2>
+                <div class="search-container">
+                    <div class="search-wrapper">
+                        <input type="text" class="search-input" id="searchInput"
+                            placeholder="Pesquisar serviços ou produtos...">
+                        <button class="clear-btn" id="clearBtn">×</button>
+                    </div>
+                </div>
+                <div class="services-grid" id="servicesGrid"></div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">✨ Produtos Adicionais</h2>
+                <div class="products-list" id="productsList"></div>
+            </div>
+
+            <div class="summary">
+                <h2 class="section-title">💰Resumo do Agendamento</h2>
+                <div id="summaryContent"></div>
+                <div class="button-group">
+                    <button class="btn whatsapp" id="sendWhatsAppBtn" onclick="sendWhatsApp()">
+                        📱 Agendar via WhatsApp
+                    </button>
+                    <button class="btn email" id="sendEmailBtn" onclick="sendEmail()">
+                        📧 Agendar via E-mail
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABA: HISTÓRICO -->
+        <div id="historyTab" class="tab-content">
+            <div class="section">
+                <h2 class="section-title">📊 Histórico de Agendamentos</h2>
+                <div class="history-list" id="historyList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== DADOS FIXOS ====================
+        const BUSINESS_PHONE = '5534984108754';
+        const BUSINESS_EMAIL = 'welintongm@gmail.com';
+
+        // EDITE AQUI OS HORÁRIOS DISPONÍVEIS (formato 24h)
+        const availableHours = [
+            '08:00', '09:00', '10:00', '11:00',
+            '13:00', '14:00', '15:00', '16:00', '17:00'
+        ];
+
+        // BLOQUEIE DATAS ESPECÍFICAS (formato: 'AAAA-MM-DD')
+        // Exemplo: feriados, folgas, etc.
+        const blockedDates = [
+            '2025-10-16',
+            '2025-10-17',
+            '2025-10-18'
+            // '2025-10-15',  // Exemplo: dia bloqueado
+            // '2025-10-20',
+        ];
+
+        // BLOQUEIE HORÁRIOS ESPECÍFICOS (formato: 'AAAA-MM-DD HH:MM')
+        // Use quando alguém já agendou
+        const blockedSlots = [
+            '2025-10-15 09:00',
+            '2025-10-15 08:00',
+            '2025-10-13 09:00',
+            '2025-10-13 10:00',
+            '2025-10-13 11:00',
+            '2025-10-13 13:00'
+
+            // '2025-10-15 09:00',  // Exemplo: horário já ocupado
+            // '2025-10-15 14:00',
+        ];
+
+        const services = [
+            { id: 1, name: 'Lavagem Simples', description: 'Lavagem externa completa', price: 50 },
+            { id: 2, name: 'Lavagem Completa', description: 'Lavagem externa + interna', price: 80 },
+            { id: 3, name: 'Polimento Técnico', description: 'Remoção de riscos leves', price: 250 },
+            { id: 4, name: 'Cristalização', description: 'Proteção e brilho intenso', price: 350 },
+            { id: 5, name: 'Higienização Interna', description: 'Limpeza profunda do interior', price: 150 },
+            { id: 6, name: 'Lavagem de Motor', description: 'Limpeza do compartimento do motor', price: 80 },
+            { id: 7, name: 'Limpeza de Assentos', description: 'Limpeza de Todos os Assentos', price: 70 }
+        ];
+
+        const products = [
+            { id: 1, name: 'Cera Premium', price: 60 },
+            { id: 2, name: 'Proteção de Pneus', price: 30 },
+            { id: 3, name: 'Aromatização', price: 25 },
+            { id: 4, name: 'Hidratação de Couro', price: 100 },
+            { id: 5, name: 'Vitrificação de Vidros', price: 120 },
+            { id: 6, name: 'Descontaminação da Pintura', price: 130 }
+
+        ];
+
+        // ==================== INDEXEDDB ====================
+        let db;
+        const DB_NAME = 'CarWashClientDB';
+        const DB_VERSION = 1;
+
+        function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    db = request.result;
+                    resolve(db);
+                };
+
+                request.onupgradeneeded = (event) => {
+                    db = event.target.result;
+
+                    if (!db.objectStoreNames.contains('bookings')) {
+                        const bookingsStore = db.createObjectStore('bookings', { keyPath: 'id', autoIncrement: true });
+                        bookingsStore.createIndex('date', 'date', { unique: false });
+                    }
+                };
+            });
+        }
+
+        async function saveBooking(data) {
+            const transaction = db.transaction(['bookings'], 'readwrite');
+            const store = transaction.objectStore('bookings');
+            return store.add(data);
+        }
+
+        async function getAllBookings() {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(['bookings'], 'readonly');
+                const store = transaction.objectStore('bookings');
+                const request = store.getAll();
+
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function deleteBooking(id) {
+            const transaction = db.transaction(['bookings'], 'readwrite');
+            const store = transaction.objectStore('bookings');
+            return store.delete(id);
+        }
+
+        // ==================== ESTADO DA APLICAÇÃO ====================
+        let selectedServices = [];
+        let selectedProducts = [];
+        let searchTerm = '';
+        let showAllServices = false;
+        let showAllProducts = false;
+
+        // ==================== INICIALIZAÇÃO ====================
+        async function init() {
+            await initDB();
+            setupDateInput();
+            renderServices();
+            renderProducts();
+            updateSummary();
+            loadHistory();
+            setupSearch();
+        }
+
+        function setupDateInput() {
+            const dateInput = document.getElementById('selectedDate');
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.min = today;
+            dateInput.value = today;
+            updateAvailableHours();
+        }
+
+        function isDateBlocked(dateStr) {
+            return blockedDates.includes(dateStr);
+        }
+
+        function isSlotBlocked(dateStr, timeStr) {
+            const slot = `${dateStr} ${timeStr}`;
+            return blockedSlots.includes(slot);
+        }
+
+        function updateAvailableHours() {
+            const dateInput = document.getElementById('selectedDate');
+            const timeSelect = document.getElementById('selectedTime');
+            const dateWarning = document.getElementById('dateWarning');
+            const selectedDate = dateInput.value;
+
+            // Limpar opções anteriores
+            timeSelect.innerHTML = '';
+
+            if (!selectedDate) {
+                timeSelect.disabled = true;
+                timeSelect.innerHTML = '<option value="">Selecione primeiro uma data</option>';
+                dateWarning.classList.remove('show');
+                return;
+            }
+
+            // Verificar se a data está bloqueada
+            if (isDateBlocked(selectedDate)) {
+                timeSelect.disabled = true;
+                timeSelect.innerHTML = '<option value="">Data indisponível</option>';
+                dateWarning.classList.add('show');
+                return;
+            }
+
+            dateWarning.classList.remove('show');
+            timeSelect.disabled = false;
+
+            // Adicionar opção padrão
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = 'Selecione um horário';
+            timeSelect.appendChild(defaultOption);
+
+            // Adicionar horários disponíveis
+            let hasAvailableSlots = false;
+            availableHours.forEach(hour => {
+                if (!isSlotBlocked(selectedDate, hour)) {
+                    const option = document.createElement('option');
+                    option.value = hour;
+                    option.textContent = hour;
+                    timeSelect.appendChild(option);
+                    hasAvailableSlots = true;
+                } else {
+                    // Mostrar horário bloqueado como desabilitado
+                    const option = document.createElement('option');
+                    option.value = hour;
+                    option.textContent = `${hour} (Ocupado)`;
+                    option.disabled = true;
+                    option.style.color = '#999';
+                    timeSelect.appendChild(option);
+                }
+            });
+
+            if (!hasAvailableSlots) {
+                timeSelect.disabled = true;
+                timeSelect.innerHTML = '<option value="">Sem horários disponíveis</option>';
+                dateWarning.textContent = '⚠️ Todos os horários desta data já foram reservados.';
+                dateWarning.classList.add('show');
+            }
+        }
+
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const clearBtn = document.getElementById('clearBtn');
+
+            searchInput.addEventListener('input', (e) => {
+                searchTerm = e.target.value.toLowerCase();
+                if (searchTerm) {
+                    clearBtn.classList.add('show');
+                } else {
+                    clearBtn.classList.remove('show');
+                }
+                renderServices();
+                renderProducts();
+            });
+
+            clearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                searchTerm = '';
+                clearBtn.classList.remove('show');
+                searchInput.focus();
+                showAllServices = false;
+                showAllProducts = false;
+                renderServices();
+                renderProducts();
+            });
+        }
+
+        function filterItems(items) {
+            if (!searchTerm) return items;
+            return items.filter(item =>
+                item.name.toLowerCase().includes(searchTerm) ||
+                (item.description && item.description.toLowerCase().includes(searchTerm))
+            );
+        }
+
+        // ==================== TABS ====================
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.add('active');
+
+            if (tabName === 'history') {
+                loadHistory();
+            }
+        }
+
+        // ==================== RENDERIZAÇÃO ====================
+        function renderServices() {
+            const grid = document.getElementById('servicesGrid');
+            const filtered = filterItems(services);
+            const limit = showAllServices ? filtered.length : 3;
+            const itemsToShow = filtered.slice(0, limit);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div class="no-results">Nenhum serviço encontrado</div>';
+                return;
+            }
+
+            grid.innerHTML = itemsToShow.map(service => `
+                <div class="service-card ${selectedServices.includes(service.id) ? 'selected' : ''}" onclick="toggleService(${service.id})">
+                    <h3>${service.name}</h3>
+                    <p>${service.description}</p>
+                    <div class="price">R$ ${service.price.toFixed(2)}</div>
+                </div>
+            `).join('');
+
+            if (filtered.length > 3 && !showAllServices) {
+                grid.innerHTML += `<button class="show-more-btn" onclick="showAllServices = true; renderServices();">Ver mais ${filtered.length - 3} serviços</button>`;
+            }
+        }
+
+        function renderProducts() {
+            const list = document.getElementById('productsList');
+            const filtered = filterItems(products);
+            const limit = showAllProducts ? filtered.length : 3;
+            const itemsToShow = filtered.slice(0, limit);
+
+            if (filtered.length === 0) {
+                list.innerHTML = '<div class="no-results">Nenhum produto encontrado</div>';
+                return;
+            }
+
+            list.innerHTML = itemsToShow.map(product => `
+                <div class="product-item ${selectedProducts.includes(product.id) ? 'selected' : ''}" onclick="toggleProduct(${product.id})">
+                    <input type="checkbox" id="prod${product.id}" ${selectedProducts.includes(product.id) ? 'checked' : ''} onchange="event.stopPropagation(); toggleProduct(${product.id})">
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                    </div>
+                    <div class="product-price">R$ ${product.price.toFixed(2)}</div>
+                </div>
+            `).join('');
+
+            if (filtered.length > 3 && !showAllProducts) {
+                list.innerHTML += `<button class="show-more-btn" onclick="showAllProducts = true; renderProducts();">Ver mais ${filtered.length - 3} produtos</button>`;
+            }
+        }
+
+        // ==================== SELEÇÃO ====================
+        function toggleService(id) {
+            const index = selectedServices.indexOf(id);
+            if (index > -1) {
+                selectedServices.splice(index, 1);
+            } else {
+                selectedServices.push(id);
+            }
+            renderServices();
+            updateSummary();
+        }
+
+        function toggleProduct(id) {
+            const index = selectedProducts.indexOf(id);
+            const checkbox = document.getElementById(`prod${id}`);
+
+            if (index > -1) {
+                selectedProducts.splice(index, 1);
+                if (checkbox) checkbox.checked = false;
+            } else {
+                selectedProducts.push(id);
+                if (checkbox) checkbox.checked = true;
+            }
+            renderProducts();
+            updateSummary();
+        }
+
+        // ==================== RESUMO ====================
+        function updateSummary() {
+            const summaryContent = document.getElementById('summaryContent');
+            const selectedSvcs = services.filter(s => selectedServices.includes(s.id));
+            const selectedProds = products.filter(p => selectedProducts.includes(p.id));
+
+            let total = 0;
+            let html = '';
+
+            if (selectedSvcs.length > 0) {
+                selectedSvcs.forEach(svc => {
+                    html += `
+                        <div class="summary-item">
+                            <span>${svc.name}</span>
+                            <span>R$ ${svc.price.toFixed(2)}</span>
+                        </div>
+                    `;
+                    total += svc.price;
+                });
+            }
+
+            if (selectedProds.length > 0) {
+                selectedProds.forEach(prod => {
+                    html += `
+                        <div class="summary-item">
+                            <span>${prod.name}</span>
+                            <span>R$ ${prod.price.toFixed(2)}</span>
+                        </div>
+                    `;
+                    total += prod.price;
+                });
+            }
+
+            if (total === 0) {
+                html = '<p style="text-align: center; color: #999;">Nenhum item selecionado</p>';
+            } else {
+                html += `
+                    <div class="summary-item">
+                        <span>TOTAL</span>
+                        <span>R$ ${total.toFixed(2)}</span>
+                    </div>
+                `;
+            }
+
+            summaryContent.innerHTML = html;
+
+            const whatsappBtn = document.getElementById('sendWhatsAppBtn');
+            const emailBtn = document.getElementById('sendEmailBtn');
+            whatsappBtn.disabled = total === 0;
+            emailBtn.disabled = total === 0;
+        }
+
+        // ==================== WHATSAPP ====================
+        async function sendWhatsApp() {
+            const clientName = document.getElementById('clientName').value.trim();
+            const clientPhone = document.getElementById('clientPhone').value.trim();
+            const selectedDate = document.getElementById('selectedDate').value;
+            const selectedTime = document.getElementById('selectedTime').value;
+
+            if (!clientName) {
+                alert('Por favor, preencha seu nome!');
+                return;
+            }
+
+            if (!clientPhone) {
+                alert('Por favor, preencha seu telefone!');
+                return;
+            }
+
+            if (!selectedDate) {
+                alert('Por favor, selecione a data do agendamento!');
+                return;
+            }
+
+            if (!selectedTime) {
+                alert('Por favor, selecione o horário!');
+                return;
+            }
+
+            const selectedSvcs = services.filter(s => selectedServices.includes(s.id));
+            const selectedProds = products.filter(p => selectedProducts.includes(p.id));
+            let total = 0;
+
+            const dateFormatted = new Date(selectedDate + 'T00:00:00').toLocaleDateString('pt-BR');
+
+            let message = '*SOLICITAÇÃO DE AGENDAMENTO*\n';
+            message += '━━━━━━━━━━━━━━━━━━━━━━\n\n';
+            message += `*Cliente:* ${clientName}\n`;
+            message += `*Telefone:* ${clientPhone}\n`;
+            message += `*Data:* ${dateFormatted}\n`;
+            message += `*Horário:* ${selectedTime}\n\n`;
+
+            if (selectedSvcs.length > 0) {
+                message += '*SERVIÇOS SOLICITADOS:*\n';
+                selectedSvcs.forEach(svc => {
+                    message += `• ${svc.name}: R$ ${svc.price.toFixed(2)}\n`;
+                    total += svc.price;
+                });
+                message += '\n';
+            }
+
+            if (selectedProds.length > 0) {
+                message += '*PRODUTOS ADICIONAIS:*\n';
+                selectedProds.forEach(prod => {
+                    message += `• ${prod.name}: R$ ${prod.price.toFixed(2)}\n`;
+                    total += prod.price;
+                });
+                message += '\n';
+            }
+
+            message += '━━━━━━━━━━━━━━━━━━━━━━\n';
+            message += `*VALOR TOTAL: R$ ${total.toFixed(2)}*\n`;
+            message += '━━━━━━━━━━━━━━━━━━━━━━';
+
+            // Salvar no histórico
+            await saveBooking({
+                clientName,
+                phone: clientPhone,
+                email: '',
+                date: new Date().toISOString(),
+                scheduledDate: selectedDate,
+                scheduledTime: selectedTime,
+                services: selectedSvcs,
+                products: selectedProds,
+                total
+            });
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${BUSINESS_PHONE}?text=${encodedMessage}`;
+
+            window.open(whatsappUrl, '_blank');
+
+            // Limpar formulário
+            clearForm();
+            alert('Agendamento salvo! Você será redirecionado para o WhatsApp.');
+        }
+
+        // ==================== EMAIL ====================
+        async function sendEmail() {
+            const clientName = document.getElementById('clientName').value.trim();
+            const clientEmail = document.getElementById('clientEmail').value.trim();
+            const clientPhone = document.getElementById('clientPhone').value.trim();
+            const selectedDate = document.getElementById('selectedDate').value;
+            const selectedTime = document.getElementById('selectedTime').value;
+
+            if (!clientName) {
+                alert('Por favor, preencha seu nome!');
+                return;
+            }
+
+            if (!clientEmail) {
+                alert('Por favor, preencha seu e-mail!');
+                return;
+            }
+
+            if (!selectedDate) {
+                alert('Por favor, selecione a data do agendamento!');
+                return;
+            }
+
+            if (!selectedTime) {
+                alert('Por favor, selecione o horário!');
+                return;
+            }
+
+            const selectedSvcs = services.filter(s => selectedServices.includes(s.id));
+            const selectedProds = products.filter(p => selectedProducts.includes(p.id));
+            let total = 0;
+
+            const dateFormatted = new Date(selectedDate + 'T00:00:00').toLocaleDateString('pt-BR');
+
+            let subject = 'Solicitação de Agendamento - Lavagem e Polimento';
+            let body = 'SOLICITAÇÃO DE AGENDAMENTO\n';
+            body += '━━━━━━━━━━━━━━━━━━━━━━\n\n';
+            body += `Cliente: ${clientName}\n`;
+            body += `E-mail: ${clientEmail}\n`;
+            if (clientPhone) body += `Telefone: ${clientPhone}\n`;
+            body += `Data: ${dateFormatted}\n`;
+            body += `Horário: ${selectedTime}\n`;
+            body += '\n';
+
+            if (selectedSvcs.length > 0) {
+                body += 'SERVIÇOS SOLICITADOS:\n';
+                selectedSvcs.forEach(svc => {
+                    body += `• ${svc.name}: R$ ${svc.price.toFixed(2)}\n`;
+                    total += svc.price;
+                });
+                body += '\n';
+            }
+
+            if (selectedProds.length > 0) {
+                body += 'PRODUTOS ADICIONAIS:\n';
+                selectedProds.forEach(prod => {
+                    body += `• ${prod.name}: R$ ${prod.price.toFixed(2)}\n`;
+                    total += prod.price;
+                });
+                body += '\n';
+            }
+
+            body += '━━━━━━━━━━━━━━━━━━━━━━\n';
+            body += `VALOR TOTAL: R$ ${total.toFixed(2)}\n`;
+            body += '━━━━━━━━━━━━━━━━━━━━━━\n\n';
+            body += 'Aguardo confirmação para dar continuidade ao agendamento.\n\n';
+            body += 'Atenciosamente,\n' + clientName;
+
+            // Salvar no histórico
+            await saveBooking({
+                clientName,
+                phone: clientPhone,
+                email: clientEmail,
+                date: new Date().toISOString(),
+                scheduledDate: selectedDate,
+                scheduledTime: selectedTime,
+                services: selectedSvcs,
+                products: selectedProds,
+                total
+            });
+
+            const mailtoLink = `mailto:${BUSINESS_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+
+            // Limpar formulário
+            clearForm();
+            alert('Agendamento salvo! Seu cliente de e-mail será aberto.');
+        }
+
+        // ==================== HISTÓRICO ====================
+        async function loadHistory() {
+            const bookings = await getAllBookings();
+            const historyList = document.getElementById('historyList');
+
+            if (bookings.length === 0) {
+                historyList.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">Nenhum agendamento realizado ainda.</p>';
+                return;
+            }
+
+            bookings.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            historyList.innerHTML = bookings.map(booking => {
+                const date = new Date(booking.date);
+                const dateStr = date.toLocaleDateString('pt-BR') + ' às ' + date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+                const scheduledDateFormatted = booking.scheduledDate ?
+                    new Date(booking.scheduledDate + 'T00:00:00').toLocaleDateString('pt-BR') :
+                    'Não informada';
+
+                let details = '';
+                if (booking.services && booking.services.length > 0) {
+                    details += 'Serviços: ' + booking.services.map(s => s.name).join(', ');
+                }
+                if (booking.products && booking.products.length > 0) {
+                    if (details) details += ' | ';
+                    details += 'Produtos: ' + booking.products.map(p => p.name).join(', ');
+                }
+
+                return `
+                    <div class="history-item">
+                        <div class="history-header">
+                            <div>
+                                <div class="history-client">${booking.clientName}</div>
+                                <div class="history-date">Solicitado em: ${dateStr}</div>
+                                <div class="history-date" style="color: #667eea; font-weight: bold;">Agendado para: ${scheduledDateFormatted} às ${booking.scheduledTime || 'N/A'}</div>
+                            </div>
+                            <div class="history-total">R$ ${booking.total.toFixed(2)}</div>
+                        </div>
+                        <div class="history-details">${details}</div>
+                        ${booking.phone ? `<div style="color: #666; margin-top: 5px;">📱 ${booking.phone}</div>` : ''}
+                        ${booking.email ? `<div style="color: #666; margin-top: 5px;">📧 ${booking.email}</div>` : ''}
+                        <div class="history-actions">
+                            <button class="btn btn-small" onclick="resendBooking(${booking.id})">🔄 Reagendar</button>
+                            <button class="btn danger btn-small" onclick="cancelBooking(${booking.id})">❌ Desmarcar Serviço</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function cancelBooking(id) {
+            const bookings = await getAllBookings();
+            const booking = bookings.find(b => b.id === id);
+
+            if (!booking) {
+                alert('Agendamento não encontrado!');
+                return;
+            }
+
+            const option = confirm('Como deseja informar o cancelamento?\n\nOK = WhatsApp\nCancelar = E-mail');
+
+            if (option) {
+                // WhatsApp
+                sendCancellationWhatsApp(booking);
+            } else {
+                // E-mail
+                sendCancellationEmail(booking);
+            }
+
+            // Excluir após envio
+            await deleteBooking(id);
+            loadHistory();
+        }
+
+        function sendCancellationWhatsApp(booking) {
+            const dateFormatted = new Date(booking.scheduledDate + 'T00:00:00').toLocaleDateString('pt-BR');
+
+            let message = 'X-x CANCELAMENTO x-X\n';
+            message += '━━━━━━━━━━━━━━━━━━━━━━\n\n';
+            message += `*Cliente:* ${booking.clientName}\n`;
+            message += `*Telefone:* ${booking.phone || 'Não informado'}\n`;
+            message += `*Data Agendada:* ${dateFormatted}\n`;
+            message += `*Horário:* ${booking.scheduledTime}\n\n`;
+            message += '*⚠️ SOLICITAÇÃO DE CANCELAMENTO*\n\n';
+
+            if (booking.services && booking.services.length > 0) {
+                message += '*Serviços que seriam realizados:*\n';
+                booking.services.forEach(svc => {
+                    message += `• ${svc.name}\n`;
+                });
+                message += '\n';
+            }
+
+            if (booking.products && booking.products.length > 0) {
+                message += '*Produtos que seriam aplicados:*\n';
+                booking.products.forEach(prod => {
+                    message += `• ${prod.name}\n`;
+                });
+                message += '\n';
+            }
+
+            message += '━━━━━━━━━━━━━━━━━━━━━━\n';
+            message += `*Valor Total: R$ ${booking.total.toFixed(2)}*\n`;
+            message += '━━━━━━━━━━━━━━━━━━━━━━';
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${BUSINESS_PHONE}?text=${encodedMessage}`;
+            window.open(whatsappUrl, '_blank');
+
+            alert('Cancelamento registrado! Você será redirecionado para o WhatsApp.');
+        }
+
+        function sendCancellationEmail(booking) {
+            const dateFormatted = new Date(booking.scheduledDate + 'T00:00:00').toLocaleDateString('pt-BR');
+
+            let subject = 'CANCELAMENTO de Agendamento - Lavagem e Polimento';
+            let body = 'CANCELAMENTO DE AGENDAMENTO\n';
+            body += '━━━━━━━━━━━━━━━━━━━━━━\n\n';
+            body += `Cliente: ${booking.clientName}\n`;
+            body += `E-mail: ${booking.email || 'Não informado'}\n`;
+            body += `Telefone: ${booking.phone || 'Não informado'}\n`;
+            body += `Data Agendada: ${dateFormatted}\n`;
+            body += `Horário: ${booking.scheduledTime}\n\n`;
+            body += '⚠️ SOLICITAÇÃO DE CANCELAMENTO\n\n';
+
+            if (booking.services && booking.services.length > 0) {
+                body += 'Serviços que seriam realizados:\n';
+                booking.services.forEach(svc => {
+                    body += `• ${svc.name}\n`;
+                });
+                body += '\n';
+            }
+
+            if (booking.products && booking.products.length > 0) {
+                body += 'Produtos que seriam aplicados:\n';
+                booking.products.forEach(prod => {
+                    body += `• ${prod.name}\n`;
+                });
+                body += '\n';
+            }
+
+            body += '━━━━━━━━━━━━━━━━━━━━━━\n';
+            body += `Valor Total: R$ ${booking.total.toFixed(2)}\n`;
+            body += '━━━━━━━━━━━━━━━━━━━━━━\n\n';
+            body += 'Solicito o cancelamento deste agendamento.\n\n';
+            body += 'Atenciosamente,\n' + booking.clientName;
+
+            const mailtoLink = `mailto:${BUSINESS_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+
+            alert('Cancelamento registrado! Seu cliente de e-mail será aberto.');
+        }
+
+        async function resendBooking(id) {
+            const bookings = await getAllBookings();
+            const booking = bookings.find(b => b.id === id);
+
+            if (!booking) {
+                alert('Agendamento não encontrado!');
+                return;
+            }
+
+            // Preencher formulário
+            document.getElementById('clientName').value = booking.clientName;
+            document.getElementById('clientPhone').value = booking.phone || '';
+            document.getElementById('clientEmail').value = booking.email || '';
+            document.getElementById('selectedDate').value = booking.scheduledDate || new Date().toISOString().split('T')[0];
+            document.getElementById('selectedTime').value = booking.scheduledTime || '';
+
+            // Selecionar serviços e produtos
+            selectedServices = booking.services.map(s => s.id);
+            selectedProducts = booking.products.map(p => p.id);
+
+            renderServices();
+            renderProducts();
+            updateSummary();
+
+            // Voltar para aba de agendamento
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            document.querySelectorAll('.tab')[0].classList.add('active');
+            document.getElementById('bookingTab').classList.add('active');
+
+            alert('Agendamento carregado! Você pode reagendar agora.');
+        }
+
+        // ==================== LIMPAR FORMULÁRIO ====================
+        function clearForm() {
+            document.getElementById('clientName').value = '';
+            document.getElementById('clientPhone').value = '';
+            document.getElementById('clientEmail').value = '';
+            document.getElementById('selectedDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('selectedTime').value = '';
+            selectedServices = [];
+            selectedProducts = [];
+            searchTerm = '';
+            showAllServices = false;
+            showAllProducts = false;
+            document.getElementById('searchInput').value = '';
+            document.getElementById('clearBtn').classList.remove('show');
+            renderServices();
+            renderProducts();
+            updateSummary();
+        }
+
+        // ==================== INICIAR ====================
+        init();
+    </script>
+</body>
+
+</html>
