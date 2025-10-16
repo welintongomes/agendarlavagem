@@ -15,12 +15,12 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 12px;
+}
 
         .container {
             max-width: 1200px;
@@ -104,14 +104,14 @@
             margin-bottom: 20px;
         }
 
-.service-card {
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
-    padding: 7px;
-    cursor: pointer;
-    transition: all 0.3s;
-    background: white;
-}
+        .service-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 7px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
 
         .service-card:hover {
             border-color: #667eea;
@@ -280,14 +280,15 @@
             font-weight: bold;
         }
 
-.input-group input, .input-group textarea {
-    padding: 5px;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 1em;
-    transition: border-color 0.3s;
-    font-family: inherit;
-}
+        .input-group input,
+        .input-group textarea {
+            padding: 5px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
 
         .input-group input:focus,
         .input-group textarea:focus {
@@ -462,6 +463,212 @@
             font-size: 18px;
         }
 
+        /* ==================== GALERIA DE TRABALHOS ==================== */
+        .gallery-section {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 1200px;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+.gallery-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 8px 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    transition: background 0.3s ease;
+}
+
+        .gallery-header:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .gallery-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .gallery-toggle {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-toggle.open {
+            transform: rotate(180deg);
+        }
+
+        .gallery-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+
+        .gallery-content.open {
+            max-height: 2000px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            padding: 30px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            cursor: pointer;
+            aspect-ratio: 1;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            color: white;
+            padding: 15px 10px 10px;
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-item-caption {
+            opacity: 1;
+        }
+
+        /* Modal de Imagem */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 85vh;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: zoomIn 0.3s;
+            border-radius: 8px;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+
+            to {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+            z-index: 10000;
+        }
+
+        .modal-close:hover {
+            color: #667eea;
+        }
+
+        .modal-caption {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            text-align: center;
+            color: #ccc;
+            padding: 20px;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.1rem;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 10px;
+                padding: 20px;
+            }
+
+            .modal-content {
+                max-width: 95%;
+                max-height: 80vh;
+            }
+
+            .modal-close {
+                top: 10px;
+                right: 20px;
+                font-size: 40px;
+            }
+
+            .modal-caption {
+                font-size: 0.9rem;
+                padding: 10px;
+                bottom: 10px;
+            }
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 1.5em;
@@ -479,10 +686,292 @@
                 flex-direction: row;
             }
         }
+
+        /* ==================== CATEGORIAS DA GALERIA ==================== */
+        .gallery-category {
+            margin-bottom: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-category:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .category-header {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: background 0.3s ease;
+            user-select: none;
+        }
+
+        .category-header:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .category-header:hover h3,
+        .category-header:hover .category-count,
+        .category-header:hover .category-arrow {
+            color: white;
+        }
+
+        .category-header h3 {
+            margin: 0;
+            flex: 1;
+            font-size: 1.2rem;
+            color: #333;
+            transition: color 0.3s ease;
+        }
+
+        .category-count {
+            background: rgba(102, 126, 234, 0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #667eea;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .category-header:hover .category-count {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .category-arrow {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+            color: #667eea;
+        }
+
+        .category-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .category-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            background: #fafafa;
+        }
+
+        .category-images.open {
+            max-height: 2000px;
+            padding: 25px;
+        }
+
+        /* Ajustar o grid principal para categorias */
+        .gallery-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding: 30px;
+        }
+
+        /* Responsivo para categorias */
+        @media (max-width: 768px) {
+            .category-header {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+            }
+
+            .category-header h3 {
+                font-size: 1rem;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .category-images {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 10px;
+            }
+
+            .category-images.open {
+                padding: 15px;
+            }
+        }
+        /* ==================== SLIDER DE TRABALHOS ==================== */
+.works-slider {
+    margin: 5px 0;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    padding: 11px 2px;
+}
+
+.works-slider h2 {
+    text-align: center;
+    color: white;
+    margin-bottom: 6px;
+    font-size: 23px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.slider-container {
+    position: relative;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.slider-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    gap: 15px;
+}
+
+.slide-item {
+    min-width: calc(33.333% - 10px);
+    position: relative;
+    cursor: pointer;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+}
+
+.slide-item:hover {
+    transform: scale(1.05);
+}
+
+.slide-item img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display: block;
+}
+
+.slide-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+    color: white;
+    padding: 20px 15px 15px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.slider-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.9);
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.slider-nav:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.slider-nav.prev {
+    left: 10px;
+}
+
+.slider-nav.next {
+    right: 10px;
+}
+
+.slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background: white;
+    transform: scale(1.3);
+}
+
+@media (max-width: 768px) {
+    .slide-item {
+        min-width: calc(50% - 7.5px);
+    }
+    
+    .slide-item img {
+        height: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .slide-item {
+        min-width: 100%;
+    }
+    
+    .slider-nav {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+}
     </style>
 </head>
 
 <body>
+        <!-- SLIDER DE ÚLTIMOS TRABALHOS -->
+<div class="works-slider">
+    <h2>🌟 Últimos Trabalhos</h2>
+    <div class="slider-container">
+        <button class="slider-nav prev" onclick="moveSlide(-1)">‹</button>
+        <div class="slider-track" id="sliderTrack"></div>
+        <button class="slider-nav next" onclick="moveSlide(1)">›</button>
+    </div>
+    <div class="slider-dots" id="sliderDots"></div>
+</div>
+
+    <!-- GALERIA DE TRABALHOS -->
+    <section class="gallery-section">
+        <div class="gallery-header" onclick="toggleGallery()">
+            <h2>🖼️ Nossos Trabalhos</h2>
+            <span class="gallery-toggle" id="galleryToggle">▼</span>
+        </div>
+        <div class="gallery-content" id="galleryContent">
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- As imagens serão carregadas aqui -->
+            </div>
+        </div>
+    </section>
+
+    <!-- MODAL DE IMAGEM -->
+    <div class="image-modal" id="imageModal" onclick="closeModal()">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div class="modal-caption" id="modalCaption"></div>
+    </div>
+
     <div class="container">
         <div class="header">
             <h1>🚗 Lavagem & Polimento</h1>
@@ -603,6 +1092,137 @@
             // '2025-10-15 14:00',
         ];
 
+        // ==================== CONFIGURAÇÃO DA GALERIA ====================
+        // ADICIONE AQUI AS SUAS IMAGENS
+        // Coloque as imagens na pasta raiz do GitHub (ex: imagem1.jpg, imagem2.jpg)
+        // ==================== CONFIGURAÇÃO DA GALERIA ====================
+        const galleryCategories = [
+            {
+                id: 'polimento',
+                name: '✨ Polimento e Cristalização',
+                images: [
+                    { src: './polimento1.jpg', caption: 'Polimento Técnico - Sedan Preto' },
+                    { src: './polimento2.jpg', caption: 'Cristalização Completa - SUV Branco' }
+                    //{ src: './polimento3.jpg', caption: 'Polimento + Cristalização - Hatch' }
+                ]
+            },
+            {
+                id: 'lavagem',
+                name: '🚿 Lavagem Premium',
+                images: [
+                    { src: './lavagem1.jpg', caption: 'Lavagem Externa Completa' },
+                    { src: './lavagem2.jpg', caption: 'Lavagem + Cera - SUV' }
+                    //{ src: './lavagem3.jpg', caption: 'Lavagem Detalhada - Sedan' }
+                ]
+            },
+            {
+                id: 'interna',
+                name: '🧼 Higienização Interna',
+                images: [
+                    { src: './interna1.jpg', caption: 'Higienização Completa - Interior' }
+                    //{ src: './interna2.jpg', caption: 'Limpeza de Bancos - Couro' },
+                    //{ src: './interna3.jpg', caption: 'Aspiração e Aromatização' }
+                ]
+            },
+            {
+                id: 'motor',
+                name: '🔧 Lavagem de Motor',
+                images: [
+                    { src: './motor1.jpg', caption: 'Lavagem de Motor - Antes e Depois' }
+                    //{ src: './motor2.jpg', caption: 'Motor Limpo e Protegido' }
+                ]
+            }
+        ];
+
+        let activeCategory = null;
+
+        // ==================== FUNÇÕES DA GALERIA ====================
+        function toggleGallery() {
+            const content = document.getElementById('galleryContent');
+            const toggle = document.getElementById('galleryToggle');
+
+            content.classList.toggle('open');
+            toggle.classList.toggle('open');
+        }
+        function toggleCategory(categoryId) {
+            const categoryImages = document.getElementById(`category-${categoryId}`);
+            const arrow = document.getElementById(`arrow-${categoryId}`);
+
+            if (activeCategory === categoryId) {
+                // Fechar categoria ativa
+                categoryImages.classList.remove('open');
+                arrow.classList.remove('open');
+                activeCategory = null;
+            } else {
+                // Fechar todas as outras categorias
+                document.querySelectorAll('.category-images').forEach(cat => {
+                    cat.classList.remove('open');
+                });
+                document.querySelectorAll('.category-arrow').forEach(arr => {
+                    arr.classList.remove('open');
+                });
+
+                // Abrir categoria selecionada
+                categoryImages.classList.add('open');
+                arrow.classList.add('open');
+                activeCategory = categoryId;
+            }
+        }
+
+        function renderGallery() {
+            const grid = document.getElementById('galleryGrid');
+
+            if (galleryCategories.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; color: #999; padding: 40px; grid-column: 1/-1;">📷 Em breve adicionaremos fotos dos nossos trabalhos!</p>';
+                return;
+            }
+
+            // Renderizar categorias
+            grid.innerHTML = galleryCategories.map(category => `
+        <div class="gallery-category">
+            <div class="category-header" onclick="toggleCategory('${category.id}')">
+                <h3>${category.name}</h3>
+                <span class="category-count">${category.images.length} ${category.images.length === 1 ? 'foto' : 'fotos'}</span>
+                <span class="category-arrow" id="arrow-${category.id}">▼</span>
+            </div>
+            <div class="category-images" id="category-${category.id}">
+                ${category.images.map(img => `
+                    <div class="gallery-item" onclick="openModal('${img.src}', '${img.caption}')">
+                        <img src="${img.src}" alt="${img.caption}" loading="lazy" onerror="this.parentElement.style.display='none'">
+                        <div class="gallery-item-caption">${img.caption}</div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `).join('');
+        }
+
+        function openModal(src, caption) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const modalCaption = document.getElementById('modalCaption');
+
+            modal.style.display = 'block';
+            modalImg.src = src;
+            modalCaption.textContent = caption;
+
+            // Prevenir scroll do body quando modal está aberto
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Fechar modal com tecla ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
         const services = [
             { id: 1, name: 'Lavagem Simples', description: 'Lavagem externa completa', price: 50 },
             { id: 2, name: 'Lavagem Completa', description: 'Lavagem externa + interna', price: 80 },
@@ -679,15 +1299,118 @@
         let showAllServices = false;
         let showAllProducts = false;
 
+        // ==================== SLIDER DE TRABALHOS ====================
+const sliderImages = [
+    { src: './trabalho1.jpg', caption: 'Polimento Técnico - Resultado Incrível' },
+    { src: './polimento2.jpg', caption: 'Cristalização Premium - Brilho Espelhado' },
+    { src: './trabalho6.jpg', caption: 'Lavagem Completa - Carro Impecável' },
+    { src: './lavagem2.jpg', caption: 'Lavagem + Cera - Proteção Total' },
+    { src: './interna1.jpg', caption: 'Higienização Interna - Conforto Renovado' },
+    { src: './motor1.jpg', caption: 'Lavagem de Motor - Como Novo' }
+];
+
+let currentSlide = 0;
+let slidesPerView = 3;
+let autoSlideInterval;
+
+function updateSlidesPerView() {
+    if (window.innerWidth <= 480) {
+        slidesPerView = 1;
+    } else if (window.innerWidth <= 768) {
+        slidesPerView = 2;
+    } else {
+        slidesPerView = 3;
+    }
+}
+
+function renderSlider() {
+    const track = document.getElementById('sliderTrack');
+    const dots = document.getElementById('sliderDots');
+    
+    if (!track || sliderImages.length === 0) return;
+    
+    // Renderizar slides
+    track.innerHTML = sliderImages.map((img, index) => `
+        <div class="slide-item" onclick="openModal('${img.src}', '${img.caption}')">
+            <img src="${img.src}" alt="${img.caption}" loading="lazy" onerror="this.parentElement.style.display='none'">
+            <div class="slide-caption">${img.caption}</div>
+        </div>
+    `).join('');
+    
+    // Renderizar dots
+    const totalDots = Math.ceil(sliderImages.length / slidesPerView);
+    dots.innerHTML = Array.from({ length: totalDots }, (_, i) => 
+        `<span class="dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></span>`
+    ).join('');
+    
+    updateSlidePosition();
+}
+
+function updateSlidePosition() {
+    const track = document.getElementById('sliderTrack');
+    if (!track) return;
+    
+    const slideWidth = 100 / slidesPerView;
+    const offset = -currentSlide * slideWidth;
+    track.style.transform = `translateX(${offset}%)`;
+    
+    // Atualizar dots
+    document.querySelectorAll('.dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+    });
+}
+
+function moveSlide(direction) {
+    const maxSlide = Math.ceil(sliderImages.length / slidesPerView) - 1;
+    currentSlide += direction;
+    
+    if (currentSlide < 0) {
+        currentSlide = maxSlide;
+    } else if (currentSlide > maxSlide) {
+        currentSlide = 0;
+    }
+    
+    updateSlidePosition();
+    resetAutoSlide();
+}
+
+function goToSlide(index) {
+    currentSlide = index;
+    updateSlidePosition();
+    resetAutoSlide();
+}
+
+function startAutoSlide() {
+    autoSlideInterval = setInterval(() => {
+        moveSlide(1);
+    }, 5000); // Muda a cada 5 segundos
+}
+
+function resetAutoSlide() {
+    clearInterval(autoSlideInterval);
+    startAutoSlide();
+}
+
+// Atualizar slides ao redimensionar
+window.addEventListener('resize', () => {
+    updateSlidesPerView();
+    currentSlide = 0;
+    updateSlidePosition();
+});
+
         // ==================== INICIALIZAÇÃO ====================
         async function init() {
             await initDB();
-            setupDateInput();
+                setupDateInput();
+    updateSlidesPerView();
+    renderSlider();
+    startAutoSlide(); // <-- ADICIONAR
             renderServices();
             renderProducts();
             updateSummary();
             loadHistory();
             setupSearch();
+            renderGallery(); // <-- ADICIONAR ESTA LINHA
         }
 
         function setupDateInput() {
