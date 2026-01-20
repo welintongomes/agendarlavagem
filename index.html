@@ -1016,6 +1016,31 @@
                 justify-content: center;
             }
         }
+
+        /* Vídeo no slider */
+        .slide-video {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .video-play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 60px;
+            opacity: 0.8;
+            pointer-events: none;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .slide-item:hover .video-play-icon {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.2);
+            transition: all 0.3s ease;
+        }
     </style>
 </head>
 
@@ -1031,34 +1056,6 @@
         <div class="slider-dots" id="sliderDots"></div>
     </div>
 
-    <!-- VÍDEO DESTACADO -->
-<section class="video-section">
-    <div class="video-header">
-        <h2>🎬 Veja Nosso Trabalho em Ação</h2>
-    </div>
-    <div class="video-container">
-        <video 
-            id="mainVideo" 
-            class="video-player" 
-            controls
-            onclick="toggleFullscreen()"
-        >
-            <source src="./seu-video.mp4" type="video/mp4">
-            Seu navegador não suporta o elemento de vídeo.
-        </video>
-        <div class="video-controls">
-            <button class="video-btn" onclick="playPauseVideo()">
-                <span id="playPauseIcon">▶️</span> Play/Pause
-            </button>
-            <button class="video-btn fullscreen" onclick="toggleFullscreen()">
-                🖥️ Tela Cheia
-            </button>
-            <button class="video-btn" onclick="restartVideo()">
-                🔄 Reiniciar
-            </button>
-        </div>
-    </div>
-</section>
 
     <!-- GALERIA DE TRABALHOS -->
     <section class="gallery-section">
@@ -1411,6 +1408,7 @@
         // coloque na pasta guithub as imagens que quer que apareça nos ultimos trabalhos slides
         const sliderImages = [
             { src: './trabalho1.jpg', caption: 'Polimento Técnico - Resultado Incrível' },
+            { src: './seu-video.mp4', caption: '🎬 Veja nosso trabalho em ação!', type: 'video' },
             { src: './polimento2.jpg', caption: 'Cristalização Premium - Brilho Espelhado' },
             { src: './trabalho6.jpg', caption: 'Lavagem Completa - Carro Impecável' },
             { src: './lavagem2.jpg', caption: 'Lavagem + Cera - Proteção Total' },
@@ -1438,13 +1436,33 @@
 
             if (!track || sliderImages.length === 0) return;
 
-            // Renderizar slides
-            track.innerHTML = sliderImages.map((img, index) => `
-        <div class="slide-item" onclick="openModal('${img.src}', '${img.caption}')">
-            <img src="${img.src}" alt="${img.caption}" loading="lazy" onerror="this.parentElement.style.display='none'">
-            <div class="slide-caption">${img.caption}</div>
-        </div>
-    `).join('');
+            // Renderizar slides (imagens e vídeos)
+            track.innerHTML = sliderImages.map((item, index) => {
+                if (item.type === 'video') {
+                    return `
+                <div class="slide-item" onclick="openVideoFullscreen('${item.src}', '${item.caption}')">
+                    <video 
+                        class="slide-video" 
+                        src="${item.src}" 
+                        muted 
+                        autoplay 
+                        loop 
+                        playsinline
+                        onerror="this.parentElement.style.display='none'"
+                    ></video>
+                    <div class="slide-caption">${item.caption}</div>
+                    <div class="video-play-icon">▶️</div>
+                </div>
+            `;
+                } else {
+                    return `
+                <div class="slide-item" onclick="openModal('${item.src}', '${item.caption}')">
+                    <img src="${item.src}" alt="${item.caption}" loading="lazy" onerror="this.parentElement.style.display='none'">
+                    <div class="slide-caption">${item.caption}</div>
+                </div>
+            `;
+                }
+            }).join('');
 
             // Renderizar dots baseado nas posições possíveis
             const maxPosition = Math.max(0, sliderImages.length - slidesPerView);
@@ -2163,61 +2181,100 @@
             updateSummary();
         }
         // ==================== CONTROLES DE VÍDEO ====================
-function playPauseVideo() {
-    const video = document.getElementById('mainVideo');
-    const icon = document.getElementById('playPauseIcon');
-    
-    if (video.paused) {
-        video.play();
-        icon.textContent = '⏸️';
-    } else {
-        video.pause();
-        icon.textContent = '▶️';
-    }
-}
+        function playPauseVideo() {
+            const video = document.getElementById('mainVideo');
+            const icon = document.getElementById('playPauseIcon');
 
-function toggleFullscreen() {
-    const video = document.getElementById('mainVideo');
-    
-    if (!document.fullscreenElement) {
-        if (video.requestFullscreen) {
-            video.requestFullscreen();
-        } else if (video.webkitRequestFullscreen) {
-            video.webkitRequestFullscreen();
-        } else if (video.msRequestFullscreen) {
-            video.msRequestFullscreen();
+            if (video.paused) {
+                video.play();
+                icon.textContent = '⏸️';
+            } else {
+                video.pause();
+                icon.textContent = '▶️';
+            }
         }
-    } else {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
+
+        function toggleFullscreen() {
+            const video = document.getElementById('mainVideo');
+
+            if (!document.fullscreenElement) {
+                if (video.requestFullscreen) {
+                    video.requestFullscreen();
+                } else if (video.webkitRequestFullscreen) {
+                    video.webkitRequestFullscreen();
+                } else if (video.msRequestFullscreen) {
+                    video.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
         }
-    }
-}
 
-function restartVideo() {
-    const video = document.getElementById('mainVideo');
-    video.currentTime = 0;
-    video.play();
-    document.getElementById('playPauseIcon').textContent = '⏸️';
-}
-
-// Atualizar ícone quando o vídeo terminar
-document.addEventListener('DOMContentLoaded', () => {
-    const video = document.getElementById('mainVideo');
-    if (video) {
-        video.addEventListener('ended', () => {
-            document.getElementById('playPauseIcon').textContent = '▶️';
-        });
-        
-        video.addEventListener('play', () => {
+        function restartVideo() {
+            const video = document.getElementById('mainVideo');
+            video.currentTime = 0;
+            video.play();
             document.getElementById('playPauseIcon').textContent = '⏸️';
+        }
+
+        // Atualizar ícone quando o vídeo terminar
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('mainVideo');
+            if (video) {
+                video.addEventListener('ended', () => {
+                    document.getElementById('playPauseIcon').textContent = '▶️';
+                });
+
+                video.addEventListener('play', () => {
+                    document.getElementById('playPauseIcon').textContent = '⏸️';
+                });
+
+                video.addEventListener('pause', () => {
+                    document.getElementById('playPauseIcon').textContent = '▶️';
+                });
+            }
         });
-        
-        video.addEventListener('pause', () => {
-            document.getElementById('playPauseIcon').textContent = '▶️';
-        });
-    }
-});
+        // ==================== VÍDEO EM TELA CHEIA ====================
+        function openVideoFullscreen(src, caption) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const modalCaption = document.getElementById('modalCaption');
+
+            // Criar elemento de vídeo
+            const videoElement = document.createElement('video');
+            videoElement.src = src;
+            videoElement.controls = true;
+            videoElement.autoplay = true;
+            videoElement.className = 'modal-content';
+            videoElement.id = 'modalVideo';
+
+            // Substituir imagem por vídeo
+            modalImg.style.display = 'none';
+            modalImg.parentNode.insertBefore(videoElement, modalImg);
+
+            modal.style.display = 'block';
+            modalCaption.textContent = caption;
+
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Atualizar função closeModal para remover vídeo
+        const originalCloseModal = closeModal;
+        closeModal = function () {
+            const modalVideo = document.getElementById('modalVideo');
+            if (modalVideo) {
+                modalVideo.pause();
+                modalVideo.remove();
+            }
+            const modalImg = document.getElementById('modalImage');
+            modalImg.style.display = 'block';
+
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
 
         // ==================== INICIAR ====================
         init();
